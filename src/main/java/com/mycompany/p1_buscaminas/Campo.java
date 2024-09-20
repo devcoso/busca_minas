@@ -10,7 +10,7 @@ import java.util.Random;
  * @author cosoa
  */
 public class Campo {
-    private int [][] grilla;
+    private int[][] grilla = new int[0][0];
     private int n = 0;
     private int m = 0;
     public Campo(int n, int m, int minas){
