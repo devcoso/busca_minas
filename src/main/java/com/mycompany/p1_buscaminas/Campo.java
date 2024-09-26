@@ -1,14 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.p1_buscaminas;
 import java.util.Random;
 
-/**
- *
- * @author cosoa
- */
 public class Campo {
     private int[][] grilla = new int[0][0];
     private int n = 0;
@@ -17,19 +9,33 @@ public class Campo {
         this.n = n;
         this.m = m;
         this.grilla = new int[m][n];
-        for(int i=0; i<n; i++){
-            for(int j=0; j<m; j++){
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
                  this.grilla[i][j] = 0;
             }
         }
         int contador_minas =0;
         while(contador_minas < minas){
             Random random = new Random();
-            int x = random.nextInt(n);
             int y = random.nextInt(m);
-            if(this.grilla[x][y] != -1){
-               this.grilla[x][y] = -1;
+            int x = random.nextInt(n);
+            if(this.grilla[y][x] != -1){
+               this.grilla[y][x] = -1;
                contador_minas++;
+               //Suma las casillas alrededor
+                boolean isy_gt_z = y-1 > -1;
+                boolean isx_gt_z = x-1 > -1;
+                boolean isy_lt_m = y+1 < m;
+                boolean isx_lt_n = x+1 < n;
+
+                if ( isy_gt_z && this.grilla[y-1][x] != -1 ) this.grilla[y-1][x]++;
+                if ( isy_gt_z && isx_lt_n && this.grilla[y-1][x+1] != -1 ) this.grilla[y-1][x+1]++;
+                if ( isx_lt_n && this.grilla[y][x+1] != -1 ) this.grilla[y][x+1]++;
+                if ( isy_lt_m && isx_lt_n && this.grilla[y+1][x+1] != -1 ) this.grilla[y+1][x+1]++;
+                if ( isy_lt_m && this.grilla[y+1][x] != -1 ) this.grilla[y+1][x]++;
+                if ( isy_lt_m && isx_gt_z && this.grilla[y+1][x-1] != -1 ) this.grilla[y+1][x-1]++;
+                if ( isx_gt_z && this.grilla[y][x-1] != -1 ) this.grilla[y][x-1]++;
+                if ( isy_gt_z && isx_gt_z && this.grilla[y-1][x-1] != -1 ) this.grilla[y-1][x-1]++;
             }
         }
     }
@@ -38,7 +44,7 @@ public class Campo {
         for(int i=0; i<this.n; i++){
             for(int j=0; j<this.m; j++){
                 System.out.print(this.grilla[i][j]);
-                System.out.print(" ");
+                System.out.print("\t");
             }
             System.out.print("\n");
         }
