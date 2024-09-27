@@ -3,15 +3,19 @@ import java.util.Random;
 
 public class Campo {
     private int[][] grilla = new int[0][0];
+    private int[][] mostrar = new int[0][0];
     private int n = 0;
     private int m = 0;
+    
     public Campo(int n, int m, int minas){
         this.n = n;
         this.m = m;
         this.grilla = new int[m][n];
+        this.mostrar = new int[m][n];
         for(int i=0; i<m; i++){
             for(int j=0; j<n; j++){
                  this.grilla[i][j] = 0;
+                 this.mostrar[i][j] = 0;
             }
         }
         int contador_minas =0;
@@ -41,8 +45,8 @@ public class Campo {
     }
     
     public void show() {
-        for(int i=0; i<this.n; i++){
-            for(int j=0; j<this.m; j++){
+        for(int i=0; i<this.m; i++){
+            for(int j=0; j<this.n; j++){
                 System.out.print(this.grilla[i][j]);
                 System.out.print("\t");
             }
