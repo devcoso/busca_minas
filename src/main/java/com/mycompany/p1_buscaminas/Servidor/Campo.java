@@ -1,4 +1,4 @@
-package com.mycompany.p1_buscaminas;
+package com.mycompany.p1_buscaminas.Servidor;
 import java.util.Random;
 
 public class Campo {

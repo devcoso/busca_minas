@@ -1,11 +1,11 @@
-package com.mycompany.p1_buscaminas;
+package com.mycompany.p1_buscaminas.Cliente;
 
 import javax.swing.JFrame;
 import javax.swing.JButton;
 
 public class Juego extends JFrame{
 
-	public Juego(int venX, int venY, int mine, int tabX, int tabY) {
+	public Juego(int venX, int venY, int mine, int n, int m) {
 		
 		getContentPane().setLayout(null);
 		
@@ -16,8 +16,8 @@ public class Juego extends JFrame{
 		int ancho = 30;
 		int largo = 30;
 		
-		for(int i = 0; i < tabX; i++) {
-			for(int j = 0; j < tabY; j++) {
+		for(int i = 0; i < m; i++) {
+			for(int j = 0; j < n; j++) {
 				btn[i][j] = new JButton();
 				btn[i][j].setName(i + "," + j);
 				
