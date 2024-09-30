@@ -4,17 +4,19 @@ import javax.swing.JFrame;
 import javax.swing.JButton;
 
 public class Juego extends JFrame{
-
-	public Juego(int venX, int venY, int mine, int n, int m) {
+	public int status = 0;
+	JButton [][] btn = new JButton[0][0];
+	
+	public Juego(int mine, int n, int m) {
 		
 		getContentPane().setLayout(null);
 		
-		JButton [][] btn;
-		btn = new JButton[venY][venX];
+		this.btn = new JButton[m][n];
+
 		int refX = 25;
 		int refY = 25;
-		int ancho = 30;
-		int largo = 30;
+		int ancho = 40;
+		int largo = 40;
 		
 		for(int i = 0; i < m; i++) {
 			for(int j = 0; j < n; j++) {
@@ -28,20 +30,36 @@ public class Juego extends JFrame{
 				}else {
 					btn[i][j].setBounds(btn[i-1][j].getX(), btn[i-1][j].getY() + btn[i-1][j].getHeight(), ancho, largo);
 				}
-				
+				btn[i][j].setFont(new java.awt.Font("Tahoma", 0, 11));
+				btn[i][j].setText("");
+				btn[i][j].addActionListener(new java.awt.event.ActionListener() {
+					public void actionPerformed(java.awt.event.ActionEvent evt) {
+						JButton btn = (JButton) evt.getSource();
+						String[] pos = btn.getName().split(",");
+						int x = Integer.parseInt(pos[0]);
+						int y = Integer.parseInt(pos[1]);
+						mostrar(x, y);
+					}
+				});
 				getContentPane().add(btn[i][j]);
 			}
 		}
 		
-		this.setSize(venX, venY);
+		this.setSize((n + 6) * ancho, (m + 2) * largo);
 		this.setVisible(true);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 	}
-	
-	public static void main(String[] args) {
-		
+
+	private void mostrar(int x, int y) {
+		System.out.println("Posicion: " + x + "," + y);
 	}
+
+	public int getStatus() {
+		return this.status;
+	}
+
+	
 
 }

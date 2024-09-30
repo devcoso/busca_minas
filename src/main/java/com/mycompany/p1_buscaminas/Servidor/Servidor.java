@@ -31,6 +31,14 @@ public class Servidor {
                 Campo campo = new Campo(dificultad.n, dificultad.m, dificultad.minas);
                 campo.show();
 
+                int status = 0;
+
+                //GameLoop 
+                while( status == 0) {
+                    Thread.sleep(100);
+                }
+
+
                 sc.close();
             }
 

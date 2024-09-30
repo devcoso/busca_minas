@@ -15,24 +15,18 @@ public class Dificultad {
                 this.n = 9;
                 this.m = 9;
                 this.minas = 10;
-                this.venX = 340;
-                this.venY = 360;
                 break;
                 
             case "Intermedio":
                 this.n = 16;
                 this.m = 16;
                 this.minas = 40;
-                this.venX = 550;
-                this.venY = 570;
                 break;
                 
             case "Experto":
-                this.n = 16;
-                this.m = 30;
+                this.n = 30;
+                this.m = 16;
                 this.minas = 90;
-                this.venX = 570;
-                this.venY = 970;
                 break;
                 
             default:
