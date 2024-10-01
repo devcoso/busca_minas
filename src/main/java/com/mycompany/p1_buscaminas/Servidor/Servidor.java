@@ -1,10 +1,8 @@
 package com.mycompany.p1_buscaminas.Servidor;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.net.ServerSocket;
-import java.net.Socket;
 
 import com.mycompany.p1_buscaminas.Dificultad;
+import com.mycompany.p1_buscaminas.MostrarObjeto;
 
 public class Servidor {
 
@@ -17,32 +15,37 @@ public class Servidor {
             System.out.println("Servidor Iniciado");
 
             while (true) {
-                Socket sc = servidor.accept();
-                System.out.println("Cliente Conectado");
+                Conexion conexion = new Conexion(servidor.accept());
 
-                DataInputStream in = new DataInputStream(sc.getInputStream());
-
-                String respuesta = in.readUTF();
-
-                System.out.println("Dificultad seleccionada: " + respuesta);
-
+                String respuesta = conexion.getDificultad();
+                if(respuesta == null) {
+                    conexion.close();
+                    continue;
+                }
                 Dificultad dificultad = new Dificultad(respuesta);
-                
                 Campo campo = new Campo(dificultad.n, dificultad.m, dificultad.minas);
                 campo.show();
 
                 int status = 0;
-
-                //GameLoop 
-                while( status == 0) {
-                    Thread.sleep(100);
+                while (status == 0) {
+                    MostrarObjeto mostrar = conexion.getMostrar();
+                    if (mostrar == null) {
+                        conexion.close();
+                        break;
+                    }
+                    mostrar.show();
                 }
+                // int status = 0;
+                // //GameLoop
+                // while (status == 0) {
+                //     int[] pos = (int[]) inObj.readObject();
 
-
-                sc.close();
+                //     System.out.println("Posicion: " + pos[0] + ", " + pos[1]);
+                // }
             }
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }

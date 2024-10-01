@@ -1,16 +1,21 @@
 package com.mycompany.p1_buscaminas.Cliente;
 
 import javax.swing.JFrame;
-import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
+import com.mycompany.p1_buscaminas.MostrarObjeto;
+
+import javax.swing.JButton;
 public class Juego extends JFrame{
 	public int status = 0;
 	JButton [][] btn = new JButton[0][0];
+	Conexion conexion;
 	
-	public Juego(int mine, int n, int m) {
+	public Juego(int mine, int n, int m, Conexion conexion) {
 		
 		getContentPane().setLayout(null);
 		
+		this.conexion = conexion;
 		this.btn = new JButton[m][n];
 
 		int refX = 25;
@@ -48,12 +53,27 @@ public class Juego extends JFrame{
 		this.setSize((n + 6) * ancho, (m + 2) * largo);
 		this.setVisible(true);
 		this.setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
+		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		//Cerrar conenxion cuando se cierre la ventana
+		this.addWindowListener(new java.awt.event.WindowAdapter() {
+			public void windowClosing(java.awt.event.WindowEvent evt) {
+				int resp = JOptionPane.showConfirmDialog(null, "¿Desea salir del juego?", "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if(resp == JOptionPane.YES_OPTION) {
+					conexion.close();
+					System.exit(0);
+				}
+			}
+		});
 	}
 
 	private void mostrar(int x, int y) {
 		System.out.println("Posicion: " + x + "," + y);
+		try {
+			MostrarObjeto mostrar = new MostrarObjeto(x, y);
+			conexion.sendMostrar(mostrar);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public int getStatus() {

@@ -2,6 +2,7 @@ package com.mycompany.p1_buscaminas.Cliente;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -13,8 +14,7 @@ public class Menu extends JFrame {
     private JButton btn1, btn2, btn3;
     private String dificultadName = "";
 
-    public Menu() {
-         
+    public Menu(Conexion conexion) {
         getContentPane().setLayout(null);
 
         Font fuente = new Font("Tahoma", Font.BOLD, 30);
@@ -68,8 +68,17 @@ public class Menu extends JFrame {
         this.setSize(500, 300);
         this.setVisible(true);
         this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		//Cerrar conenxion cuando se cierre la ventana
+		this.addWindowListener(new java.awt.event.WindowAdapter() {
+			public void windowClosing(java.awt.event.WindowEvent evt) {
+				int resp = JOptionPane.showConfirmDialog(null, "¿Desea salir del juego?", "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if(resp == JOptionPane.YES_OPTION) {
+					conexion.close();
+					System.exit(0);
+				}
+			}
+		});
     }
 
     public String getDificultadName() {
