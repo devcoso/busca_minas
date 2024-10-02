@@ -25,8 +25,8 @@ public class Juego extends JFrame{
 
 		int refX = 25;
 		int refY = 25;
-		int ancho = 40;
-		int largo = 40;
+		int ancho = 50;
+		int largo = 50;
 
 		this.minas = minas;
 		
@@ -185,6 +185,11 @@ public class Juego extends JFrame{
 		}else {
 			if(banderas < minas) {
 				btn.setText("M");
+				btn.setUI(new MetalButtonUI() {
+					protected java.awt.Color getDisabledTextColor() {
+						return new java.awt.Color(255, 0, 0);
+					}
+				});
 				btn.setEnabled(false);
 				banderas++;
 			}
