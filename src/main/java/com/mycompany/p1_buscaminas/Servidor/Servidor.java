@@ -18,16 +18,14 @@ public class Servidor {
             while (true) {
                 Conexion conexion = new Conexion(servidor.accept());
 
-                String respuesta = conexion.getDificultad();
+                String respuesta = conexion.getString();
                 if(respuesta == null) {
                     conexion.close();
                     continue;
                 }
                 Dificultad dificultad = new Dificultad(respuesta);
-                System.out.println("Dificultad: " + dificultad.m + "x" + dificultad.n + " con " + dificultad.minas + " minas");
                 Campo campo = new Campo(dificultad.n, dificultad.m, dificultad.minas);
                 campo.show();
-
                 //Tiempo
                 long startTime = System.currentTimeMillis();
 
@@ -47,6 +45,14 @@ public class Servidor {
                     long endTime = System.currentTimeMillis();
                     long tiempo = endTime - startTime;
                     System.out.println("Ganó en " + tiempo + "ms");
+                    conexion.sendTime((int) tiempo);
+                    String nombre = conexion.getString();
+                    if(nombre == null) {
+                        System.out.println("No se pudo guardar el registro");
+                        conexion.close();
+                        continue;
+                    }
+                    System.out.println("Guardando registro: " + nombre + " - " + tiempo);
                 } else if(status == -1) {
                     System.out.println("Perdió");
                 }

@@ -136,6 +136,10 @@ public class Juego extends JFrame{
 							}
 						});
 					}else {
+						if(btn[i][j].getText().equals("M")) {
+							banderas--;
+							banderasText.setText("Minas: " + banderas + "/" + minas);
+						};
 						btn[i][j].setText(String.valueOf(grilla[i][j]));
 						//Color de los numeros
 						if(grilla[i][j] == 1) {
@@ -191,14 +195,9 @@ public class Juego extends JFrame{
 				}
 			}
 
-			if(status == 1) {
-				JOptionPane.showMessageDialog(null, "Ganaste", "Fin del juego", JOptionPane.INFORMATION_MESSAGE);
-				conexion.close();
-				System.exit(0);
-			}else if(status == -1) {
-				JOptionPane.showMessageDialog(null, "Perdiste", "Fin del juego", JOptionPane.ERROR_MESSAGE);
-				conexion.close();
-				System.exit(0);
+			if (status != 0) {
+				this.status = status;
+				new Final(status, conexion);
 			}
 
 		}catch(Exception e) {
@@ -207,6 +206,8 @@ public class Juego extends JFrame{
 	}
 
  	private void toggleBander(JButton btn) {
+		if(!btn.isEnabled() && !btn.getText().equals("M")) return;
+
 		if(btn.getText().equals("M")) {
 			btn.setText("");
 			btn.setEnabled(true);

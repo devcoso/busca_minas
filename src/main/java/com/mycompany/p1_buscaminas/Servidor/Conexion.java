@@ -2,6 +2,7 @@ package com.mycompany.p1_buscaminas.Servidor;
 
 import java.net.Socket;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.EOFException;
@@ -17,7 +18,7 @@ public class Conexion {
         System.out.println("Cliente Conectado");
     }
 
-    public String getDificultad() {
+    public String getString() {
         try {
             DataInputStream in = new DataInputStream(sc.getInputStream());
             String respuesta = (String) in.readUTF();
@@ -48,6 +49,15 @@ public class Conexion {
         try {
             ObjectOutputStream out = new ObjectOutputStream(sc.getOutputStream());
             out.writeObject(campoObjeto);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendTime(int tiempo) {
+        try {
+            DataOutputStream out = new DataOutputStream(sc.getOutputStream());
+            out.writeInt(tiempo);
         } catch (Exception e) {
             e.printStackTrace();
         }

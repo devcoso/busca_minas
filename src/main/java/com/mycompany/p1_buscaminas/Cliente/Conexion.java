@@ -1,6 +1,7 @@
 package com.mycompany.p1_buscaminas.Cliente;
 
 import java.net.Socket;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -16,10 +17,10 @@ public class Conexion {
         System.out.println("Conectado con el Servidor");
     }
 
-    public void sendDificultad(String dificultadName) {
+    public void sendString(String string) {
         try {
             DataOutputStream out = new DataOutputStream(sc.getOutputStream());
-            out.writeUTF(dificultadName);
+            out.writeUTF(string);
             out.flush();
         } catch (Exception e) {
             e.printStackTrace();
@@ -45,6 +46,17 @@ public class Conexion {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public int getTime() {
+        try {
+            DataInputStream in = new DataInputStream(sc.getInputStream());
+            int respuesta = (int) in.readInt();
+            return respuesta;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
     public void close() {

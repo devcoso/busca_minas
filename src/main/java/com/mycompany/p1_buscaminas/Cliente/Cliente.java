@@ -28,7 +28,7 @@ public class Cliente {
             }
             // Envia dificultad
             String dificultadName = menu.getDificultadName();
-            conexion.sendDificultad(dificultadName);
+            conexion.sendString(dificultadName);
             // Crea dificultad en base a lo enviado
             Dificultad dificultad = new Dificultad(dificultadName);
             // Inicia juego
