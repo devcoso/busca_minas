@@ -4,6 +4,7 @@ import java.net.ServerSocket;
 import com.mycompany.p1_buscaminas.CampoObjeto;
 import com.mycompany.p1_buscaminas.Dificultad;
 import com.mycompany.p1_buscaminas.MostrarObjeto;
+import com.mycompany.p1_buscaminas.Registros;
 
 public class Servidor {
 
@@ -14,6 +15,8 @@ public class Servidor {
         try {
             ServerSocket servidor = new ServerSocket(puerto);
             System.out.println("Servidor Iniciado");
+
+            Registros registros= Registros.fromCSV("registros.csv");
 
             while (true) {
                 Conexion conexion = new Conexion(servidor.accept());
@@ -52,7 +55,10 @@ public class Servidor {
                         conexion.close();
                         continue;
                     }
-                    System.out.println("Guardando registro: " + nombre + " - " + tiempo);
+                    System.out.println("Guardando registro: " + nombre + " - " + tiempo + "ms" + " - " + dificultad.nombre);
+                    // Guardar registro
+                    registros.addRegistro(nombre, tiempo, Dificultad.fromNombre(dificultad.nombre));
+                    registros.toCSV("registros.csv");
                 } else if(status == -1) {
                     System.out.println("Perdió");
                 }
