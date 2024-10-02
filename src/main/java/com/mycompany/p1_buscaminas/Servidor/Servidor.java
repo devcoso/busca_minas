@@ -1,6 +1,7 @@
 package com.mycompany.p1_buscaminas.Servidor;
 import java.net.ServerSocket;
 
+import com.mycompany.p1_buscaminas.CampoObjeto;
 import com.mycompany.p1_buscaminas.Dificultad;
 import com.mycompany.p1_buscaminas.MostrarObjeto;
 
@@ -33,7 +34,8 @@ public class Servidor {
                         conexion.close();
                         break;
                     }
-                    mostrar.show();
+                    CampoObjeto campoObjeto = campo.mostrar(mostrar.x, mostrar.y);
+                    conexion.sendCampo(campoObjeto);
                 }
                 // int status = 0;
                 // //GameLoop

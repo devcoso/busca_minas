@@ -3,9 +3,10 @@ package com.mycompany.p1_buscaminas.Servidor;
 import java.net.Socket;
 import java.io.DataInputStream;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.EOFException;
 
-
+import com.mycompany.p1_buscaminas.CampoObjeto;
 import com.mycompany.p1_buscaminas.MostrarObjeto;
 
 public class Conexion {
@@ -41,6 +42,15 @@ public class Conexion {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void sendCampo(CampoObjeto campoObjeto) {    
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(sc.getOutputStream());
+            out.writeObject(campoObjeto);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void close() {

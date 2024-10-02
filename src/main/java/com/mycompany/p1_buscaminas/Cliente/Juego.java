@@ -3,6 +3,7 @@ package com.mycompany.p1_buscaminas.Cliente;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import com.mycompany.p1_buscaminas.CampoObjeto;
 import com.mycompany.p1_buscaminas.MostrarObjeto;
 
 import javax.swing.JButton;
@@ -26,7 +27,7 @@ public class Juego extends JFrame{
 		for(int i = 0; i < m; i++) {
 			for(int j = 0; j < n; j++) {
 				btn[i][j] = new JButton();
-				btn[i][j].setName(i + "," + j);
+				btn[i][j].setName(j + "," + i);
 				
 				if(i == 0 && j == 0) {
 					btn[i][j].setBounds(refX, refY, ancho, largo);
@@ -71,6 +72,25 @@ public class Juego extends JFrame{
 		try {
 			MostrarObjeto mostrar = new MostrarObjeto(x, y);
 			conexion.sendMostrar(mostrar);
+			CampoObjeto campo = conexion.getCampo();
+			if(campo == null) {
+				JOptionPane.showMessageDialog(null, "Error al recibir el campo", "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			campo.show();
+			int status = campo.getStatus();
+			int grilla[][] = campo.getGrilla();
+			for(int i = 0; i < grilla.length; i++) {
+				for(int j = 0; j < grilla[0].length; j++) {
+					if(grilla[i][j] > 8) continue;
+					if(grilla[i][j] == -1) {
+						btn[i][j].setText("X");
+					}else {
+						btn[i][j].setText(String.valueOf(grilla[i][j]));
+					}
+					btn[i][j].setEnabled(false);
+				}
+			}
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

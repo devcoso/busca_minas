@@ -2,8 +2,10 @@ package com.mycompany.p1_buscaminas.Cliente;
 
 import java.net.Socket;
 import java.io.DataOutputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import com.mycompany.p1_buscaminas.CampoObjeto;
 import com.mycompany.p1_buscaminas.MostrarObjeto;
 
 public class Conexion {
@@ -32,6 +34,17 @@ public class Conexion {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public CampoObjeto getCampo() {
+        try {
+            ObjectInputStream in = new ObjectInputStream(sc.getInputStream());
+            CampoObjeto respuesta = (CampoObjeto) in.readObject();
+            return respuesta;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void close() {
