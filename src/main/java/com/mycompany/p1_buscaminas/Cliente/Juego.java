@@ -1,20 +1,25 @@
 package com.mycompany.p1_buscaminas.Cliente;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+import java.util.Timer;
+
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.plaf.metal.MetalButtonUI;
 
 import com.mycompany.p1_buscaminas.CampoObjeto;
 import com.mycompany.p1_buscaminas.MostrarObjeto;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 public class Juego extends JFrame{
 	public int status = 0;
 	JButton [][] btn = new JButton[0][0];
+	JLabel banderasText = new JLabel();
 	Conexion conexion;
 	private int banderas = 0;
 	private int minas = 0;
+	private static int tiempoTranscurrido = 0; // En
 	
 	public Juego(int minas, int n, int m, Conexion conexion) {
 		
@@ -63,15 +68,39 @@ public class Juego extends JFrame{
 						}
 					}
 				});
-
 				getContentPane().add(btn[i][j]);
 			}
 		}
+		//Agregar contador de tiempo
+		JLabel tiempoText = new JLabel();
+		tiempoText.setBounds((n + 2) * ancho, 1 * largo, 2 * ancho, largo);
+		tiempoText.setText("Tiempo: 0");
+		getContentPane().add(tiempoText);
+
+		// Crear el Timer
+		Timer timer = new Timer();
+		// Programar la tarea TimerTask
+		java.util.TimerTask task = new java.util.TimerTask() {
+			public void run() {
+				tiempoTranscurrido++;
+				tiempoText.setText("Tiempo: " + tiempoTranscurrido + "s");
+			}
+		};
+		// Empezar en 0 segundos, repetir cada 1 segundo
+		timer.scheduleAtFixedRate(task, 0, 1000);
+
 		
+		//Agregar contador de banderas
+		banderasText.setBounds((n + 2) * ancho, 3 * largo, 2 * ancho, largo);		
+		banderasText.setText("Minas: " + banderas + "/" + minas);
+		getContentPane().add(banderasText);
+
+
 		this.setSize((n + 6) * ancho, (m + 2) * largo);
 		this.setVisible(true);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+
 		//Cerrar conenxion cuando se cierre la ventana
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
 			public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -194,6 +223,7 @@ public class Juego extends JFrame{
 				banderas++;
 			}
 		}
+		banderasText.setText("Minas: " + banderas + "/" + minas);
 	}
 	
 	public int getStatus() {

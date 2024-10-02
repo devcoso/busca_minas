@@ -28,6 +28,9 @@ public class Servidor {
                 Campo campo = new Campo(dificultad.n, dificultad.m, dificultad.minas);
                 campo.show();
 
+                //Tiempo
+                long startTime = System.currentTimeMillis();
+
                 int status = 0;
                 while (status == 0) {
                     MostrarObjeto mostrar = conexion.getMostrar();
@@ -39,7 +42,16 @@ public class Servidor {
                     conexion.sendCampo(campoObjeto);
                     status = campoObjeto.getStatus();
                 }
-                //conexion.close();
+
+                if(status == 1) {
+                    long endTime = System.currentTimeMillis();
+                    long tiempo = endTime - startTime;
+                    System.out.println("Ganó en " + tiempo + "ms");
+                } else if(status == -1) {
+                    System.out.println("Perdió");
+                }
+
+                conexion.close();
             }
 
         }
