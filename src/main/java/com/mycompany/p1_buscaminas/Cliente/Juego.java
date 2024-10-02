@@ -2,17 +2,21 @@ package com.mycompany.p1_buscaminas.Cliente;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.plaf.metal.MetalButtonUI;
 
 import com.mycompany.p1_buscaminas.CampoObjeto;
 import com.mycompany.p1_buscaminas.MostrarObjeto;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 public class Juego extends JFrame{
 	public int status = 0;
 	JButton [][] btn = new JButton[0][0];
 	Conexion conexion;
+	private int banderas = 0;
+	private int minas = 0;
 	
-	public Juego(int mine, int n, int m, Conexion conexion) {
+	public Juego(int minas, int n, int m, Conexion conexion) {
 		
 		getContentPane().setLayout(null);
 		
@@ -23,6 +27,8 @@ public class Juego extends JFrame{
 		int refY = 25;
 		int ancho = 40;
 		int largo = 40;
+
+		this.minas = minas;
 		
 		for(int i = 0; i < m; i++) {
 			for(int j = 0; j < n; j++) {
@@ -38,6 +44,7 @@ public class Juego extends JFrame{
 				}
 				btn[i][j].setFont(new java.awt.Font("Tahoma", 0, 11));
 				btn[i][j].setText("");
+				//Click derecho
 				btn[i][j].addActionListener(new java.awt.event.ActionListener() {
 					public void actionPerformed(java.awt.event.ActionEvent evt) {
 						JButton btn = (JButton) evt.getSource();
@@ -47,6 +54,16 @@ public class Juego extends JFrame{
 						mostrar(x, y);
 					}
 				});
+				//Click izquierdo
+				btn[i][j].addMouseListener(new java.awt.event.MouseAdapter() {
+					public void mouseClicked(java.awt.event.MouseEvent evt) {
+						if(evt.getButton() == java.awt.event.MouseEvent.BUTTON3) {
+							JButton btn = (JButton) evt.getSource();
+							toggleBander(btn);
+						}
+					}
+				});
+
 				getContentPane().add(btn[i][j]);
 			}
 		}
@@ -68,7 +85,6 @@ public class Juego extends JFrame{
 	}
 
 	private void mostrar(int x, int y) {
-		System.out.println("Posicion: " + x + "," + y);
 		try {
 			MostrarObjeto mostrar = new MostrarObjeto(x, y);
 			conexion.sendMostrar(mostrar);
@@ -77,25 +93,104 @@ public class Juego extends JFrame{
 				JOptionPane.showMessageDialog(null, "Error al recibir el campo", "Error", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			campo.show();
 			int status = campo.getStatus();
 			int grilla[][] = campo.getGrilla();
 			for(int i = 0; i < grilla.length; i++) {
 				for(int j = 0; j < grilla[0].length; j++) {
 					if(grilla[i][j] > 8) continue;
+					btn[i][j].setEnabled(false);
 					if(grilla[i][j] == -1) {
 						btn[i][j].setText("X");
+						btn[i][j].setUI(new MetalButtonUI() {
+							protected java.awt.Color getDisabledTextColor() {
+								return new java.awt.Color(255, 0, 0);
+							}
+						});
 					}else {
 						btn[i][j].setText(String.valueOf(grilla[i][j]));
+						//Color de los numeros
+						if(grilla[i][j] == 1) {
+							btn[i][j].setUI(new MetalButtonUI() {
+								protected java.awt.Color getDisabledTextColor() {
+									return new java.awt.Color(0, 0, 255);
+								}
+							});
+						}else if(grilla[i][j] == 2) {
+							btn[i][j].setUI(new MetalButtonUI() {
+								protected java.awt.Color getDisabledTextColor() {
+									return new java.awt.Color(0, 128, 0);
+								}
+							});
+						}else if(grilla[i][j] == 3) {
+							btn[i][j].setUI(new MetalButtonUI() {
+								protected java.awt.Color getDisabledTextColor() {
+									return new java.awt.Color(255, 128, 0);
+								}
+							});
+						}else if(grilla[i][j] == 4) {
+							btn[i][j].setUI(new MetalButtonUI() {
+								protected java.awt.Color getDisabledTextColor() {
+									return new java.awt.Color(128, 0, 128);
+								}
+							});
+						}else if(grilla[i][j] == 5) {
+							btn[i][j].setUI(new MetalButtonUI() {
+								protected java.awt.Color getDisabledTextColor() {
+									return new java.awt.Color(128, 64, 0);
+								}
+							});
+						}else if(grilla[i][j] == 6) {
+							btn[i][j].setUI(new MetalButtonUI() {
+								protected java.awt.Color getDisabledTextColor() {
+									return new java.awt.Color(0, 255, 255);
+								}
+							});
+						}else if(grilla[i][j] == 7) {
+							btn[i][j].setUI(new MetalButtonUI() {
+								protected java.awt.Color getDisabledTextColor() {
+									return new java.awt.Color(0, 0, 0);
+								}
+							});
+						}else if(grilla[i][j] == 8) {
+							btn[i][j].setUI(new MetalButtonUI() {
+								protected java.awt.Color getDisabledTextColor() {
+									return new java.awt.Color(128, 128, 128);
+								}
+							});
+						}
 					}
-					btn[i][j].setEnabled(false);
 				}
 			}
+
+			if(status == 1) {
+				JOptionPane.showMessageDialog(null, "Ganaste", "Fin del juego", JOptionPane.INFORMATION_MESSAGE);
+				conexion.close();
+				System.exit(0);
+			}else if(status == -1) {
+				JOptionPane.showMessageDialog(null, "Perdiste", "Fin del juego", JOptionPane.ERROR_MESSAGE);
+				conexion.close();
+				System.exit(0);
+			}
+
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+ 	private void toggleBander(JButton btn) {
+		if(btn.getText().equals("M")) {
+			btn.setText("");
+			btn.setEnabled(true);
+			banderas--;
+		}else {
+			if(banderas < minas) {
+				btn.setText("M");
+				btn.setEnabled(false);
+				banderas++;
+			}
+		}
+	}
+	
 	public int getStatus() {
 		return this.status;
 	}

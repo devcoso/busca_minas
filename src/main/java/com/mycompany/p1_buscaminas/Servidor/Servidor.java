@@ -24,6 +24,7 @@ public class Servidor {
                     continue;
                 }
                 Dificultad dificultad = new Dificultad(respuesta);
+                System.out.println("Dificultad: " + dificultad.m + "x" + dificultad.n + " con " + dificultad.minas + " minas");
                 Campo campo = new Campo(dificultad.n, dificultad.m, dificultad.minas);
                 campo.show();
 
@@ -36,14 +37,9 @@ public class Servidor {
                     }
                     CampoObjeto campoObjeto = campo.mostrar(mostrar.x, mostrar.y);
                     conexion.sendCampo(campoObjeto);
+                    status = campoObjeto.getStatus();
                 }
-                // int status = 0;
-                // //GameLoop
-                // while (status == 0) {
-                //     int[] pos = (int[]) inObj.readObject();
-
-                //     System.out.println("Posicion: " + pos[0] + ", " + pos[1]);
-                // }
+                //conexion.close();
             }
 
         }

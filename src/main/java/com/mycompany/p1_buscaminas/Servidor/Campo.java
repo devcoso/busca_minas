@@ -8,10 +8,12 @@ public class Campo {
     private int[][] mostrar = new int[0][0];
     private int n = 0;
     private int m = 0;
+    private int minas = 0;
     
     public Campo(int n, int m, int minas){
         this.n = n;
         this.m = m;
+        this.minas = minas;
         this.grilla = new int[m][n];
         this.mostrar = new int[m][n];
         for(int i=0; i<m; i++){
@@ -47,6 +49,7 @@ public class Campo {
     }
     
     public void show() {
+        System.out.println("m: " + this.m + " n: " + this.n + " minas: " + this.minas);
         for(int i=0; i<this.m; i++){
             for(int j=0; j<this.n; j++){
                 System.out.print(this.grilla[i][j]);
@@ -60,10 +63,9 @@ public class Campo {
         int[][] campo = new int[this.m][this.n];
         int status = 0;
 
-        System.out.println("Mostrar: " + x + ", " + y);
-        System.out.println("Grilla: " + this.grilla[y][x]);
-
         mostrar_casillas(x, y);
+
+        int ocultos = 0;
 
         for(int i=0; i<this.m; i++){
             for(int j=0; j<this.n; j++){
@@ -74,8 +76,13 @@ public class Campo {
                     }
                 }else{
                     campo[i][j] = 9;
+                    ocultos++;
                 }
             }
+        }
+
+        if(ocultos == minas && status != -1){
+            status = 1;
         }
 
         CampoObjeto campoObjeto;
@@ -90,8 +97,6 @@ public class Campo {
     }
     
     private void mostrar_casillas (int x, int y){ 
-        //Mostrar casillas
-        System.out.println("Mostrar casillas: " + x + ", " + y);
         this.mostrar[y][x] = 1;
         if(this.grilla[y][x] == 0){
             boolean isy_gt_z = y - 1 > -1;
@@ -99,9 +104,9 @@ public class Campo {
             boolean isy_lt_m = y+1 < m;
             boolean isx_lt_n = x+1 < n;
             if ( isy_gt_z && this.mostrar[y-1][x] == 0 )mostrar_casillas(x, y - 1);
-            if ( isy_gt_z && isx_lt_n && this.mostrar[y-1][x + 1] == 0  )mostrar_casillas(x + 1, y - 1);
+            if ( isy_gt_z && isx_lt_n && this.mostrar[y-1][x+1] == 0  )mostrar_casillas(x + 1, y - 1);
             if ( isx_lt_n && this.mostrar[y][x + 1] == 0 )mostrar_casillas(x + 1, y);
-            if ( isy_lt_m && isx_lt_n && this.mostrar[x+1][y+1] == 0  )mostrar_casillas(x + 1, y + 1);
+            if ( isy_lt_m && isx_lt_n && this.mostrar[y+1][x+1] == 0  )mostrar_casillas(x + 1, y + 1);
             if ( isy_lt_m && this.mostrar[y+1][x] == 0  )mostrar_casillas(x, y + 1);
             if ( isy_lt_m && isx_gt_z && this.mostrar[y + 1][x - 1] == 0  )mostrar_casillas(x - 1, y + 1);
             if ( isx_gt_z && this.mostrar[y][x - 1] == 0  )mostrar_casillas(x - 1, y);
