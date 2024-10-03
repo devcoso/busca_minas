@@ -28,10 +28,7 @@ public class Juego extends JFrame{
 		this.conexion = conexion;
 		this.btn = new JButton[m][n];
 
-		int refX = 25;
-		int refY = 25;
-		int ancho = 50;
-		int largo = 50;
+		int lado = 30;
 
 		this.minas = minas;
 		
@@ -41,15 +38,16 @@ public class Juego extends JFrame{
 				btn[i][j].setName(j + "," + i);
 				
 				if(i == 0 && j == 0) {
-					btn[i][j].setBounds(refX, refY, ancho, largo);
+					btn[i][j].setBounds(lado, lado, lado, lado);
 				}else if(i == 0 && j != 0) {
-					btn[i][j].setBounds(btn[i][j-1].getX() + btn[i][j-1].getWidth(), refY, ancho, largo);
+					btn[i][j].setBounds(btn[i][j-1].getX() + btn[i][j-1].getWidth(), lado, lado, lado);
 				}else {
-					btn[i][j].setBounds(btn[i-1][j].getX(), btn[i-1][j].getY() + btn[i-1][j].getHeight(), ancho, largo);
+					btn[i][j].setBounds(btn[i-1][j].getX(), btn[i-1][j].getY() + btn[i-1][j].getHeight(), lado, lado);
 				}
-				btn[i][j].setFont(new java.awt.Font("Tahoma", 0, 11));
-				btn[i][j].setText("");
-				//Click derecho
+
+				btn[i][j].setText("");		//Click derecho
+				btn[i][j].setFont(new java.awt.Font("Tahoma", 0, 16));
+				btn[i][j].setMargin(new java.awt.Insets(0, 0, 0, 0));
 				btn[i][j].addActionListener(new java.awt.event.ActionListener() {
 					public void actionPerformed(java.awt.event.ActionEvent evt) {
 						JButton btn = (JButton) evt.getSource();
@@ -73,7 +71,7 @@ public class Juego extends JFrame{
 		}
 		//Agregar contador de tiempo
 		JLabel tiempoText = new JLabel();
-		tiempoText.setBounds((n + 2) * ancho, 1 * largo, 2 * ancho, largo);
+		tiempoText.setBounds((n + 2) * lado, 1 * lado, 3 * lado, lado);
 		tiempoText.setText("Tiempo: 0");
 		getContentPane().add(tiempoText);
 
@@ -91,12 +89,12 @@ public class Juego extends JFrame{
 
 		
 		//Agregar contador de banderas
-		banderasText.setBounds((n + 2) * ancho, 3 * largo, 2 * ancho, largo);		
+		banderasText.setBounds((n + 2) * lado, 3 * lado, 3 * lado, lado);		
 		banderasText.setText("Minas: " + banderas + "/" + minas);
 		getContentPane().add(banderasText);
 
 
-		this.setSize((n + 6) * ancho, (m + 2) * largo);
+		this.setSize((n + 6) * lado, (m + 3) * lado);
 		this.setVisible(true);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
