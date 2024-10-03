@@ -29,3 +29,6 @@ Thumbs.db
 
 # Dependencias
 .mvn/
+
+#log
+registros.csv
